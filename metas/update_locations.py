@@ -32,7 +32,7 @@ for site in site_list:
 
     results = []
     for mote in jout["items"]:
-        if mote["state"] == "Alive" and mote["mobile"] == 0:
+        if mote["mobile"] == 0:
             # remove useless fields
             del mote["mobile"]
             del mote["mobility_type"]
