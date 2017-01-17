@@ -1,6 +1,7 @@
 from scipy.spatial import distance
 import urllib
 import json
+import datetime
 
 
 def helper(df, testbed=None):
@@ -20,8 +21,12 @@ def helper(df, testbed=None):
     # extract dataset properties
 
     helper["node_count"] = len(df.groupby(df["mac"]))
+    helper["channel_count"] = len(df.groupby(df["frequency"]))
     helper["tx_count"]= df["txnumpk"].iloc[0]
     helper["transaction_count"] = len(df.groupby([df["transctr"], df["srcmac"]]))
+    start_time = datetime.datetime.strptime(df["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
+    end_time = datetime.datetime.strptime(df["timestamp"].iloc[-1], "%Y-%m-%d_%H.%M.%S")
+    helper["duration"] = (start_time - end_time).seconds/3600
 
     return helper
 
