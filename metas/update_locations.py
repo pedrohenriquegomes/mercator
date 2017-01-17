@@ -10,7 +10,7 @@ import csv
 
 #-----------------------------------------------------------------------------#
 
-site_list = ["strasbourg", "lille"]
+site_list = ["strasbourg", "lille", "lyon"]
 
 for site in site_list:
     os.system("experiment-cli info -l --site {0} > tmp.json".format(site))

@@ -1,0 +1,90 @@
+[
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-1.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "2.1", 
+        "x": "1.31", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-2.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "2.51", 
+        "x": "1.31", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-3.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "1.6", 
+        "x": "3.1", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-4.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "1.6", 
+        "x": "3.82", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-5.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "2.70", 
+        "x": "4.5", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-6.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "3.92", 
+        "x": "4.5", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-7.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "4.56", 
+        "x": "4.5", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-8.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "6.2", 
+        "x": "6.94", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-9.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "3.4", 
+        "x": "8.35", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-10.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "4.22", 
+        "x": "8.35", 
+        "z": "2.78"
+    }, 
+    {
+        "archi": "a8:at86rf231", 
+        "network_address": "a8-11.lyon.iot-lab.info", 
+        "state": "Alive", 
+        "y": "6.2", 
+        "x": "10.81", 
+        "z": "2.78"
+    }
+]
