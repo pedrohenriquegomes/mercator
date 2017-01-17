@@ -59,6 +59,8 @@ def main():
         "duration": dtsh["duration"],
         "transaction_count": dtsh["transaction_count"],
         "tx_count": dtsh["tx_count"],
+        "tx_ifdur": dtsh["tx_ifdur"],
+        "tx_length": dtsh["tx_length"],
         "file_size": file_size,
     }
 

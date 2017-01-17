@@ -1,1 +1,1 @@
-{"nb_nodes": 348, "transaction_count": 5583, "tx_count": 10, "file_size": 305, "duration": 12, "nb_channels": 16}
+{"tx_count": 10, "tx_length": 100, "nb_nodes": 348, "file_size": 305, "duration": 12, "nb_channels": 16, "transaction_count": 5583, "tx_ifdur": 100}
