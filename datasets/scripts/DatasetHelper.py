@@ -22,9 +22,15 @@ def helper(df, testbed=None):
 
     helper["node_count"] = len(df.groupby(df["mac"]))
     helper["channel_count"] = len(df.groupby(df["frequency"]))
-    helper["tx_count"]= df["nbpackets"].iloc[0]
+    if "nbpackets" in df.keys():
+        helper["tx_count"]= df["nbpackets"].iloc[0]
+    else:
+        helper["tx_count"] = df["txnumpk"].iloc[0]
     helper["tx_ifdur"] = df["txifdur"].iloc[0]
-    helper["tx_length"] = df["txpksize"].iloc[0]
+    if "txpksize" in df.keys():
+        helper["tx_length"] = df["txpksize"].iloc[0]
+    else:
+        helper["tx_length"] = df["txlength"].iloc[0]
     helper["transaction_count"] = len(df.groupby([df["transctr"], df["srcmac"]]))
     start_time = datetime.datetime.strptime(df["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
     end_time = datetime.datetime.strptime(df["timestamp"].iloc[-1], "%Y-%m-%d_%H.%M.%S")

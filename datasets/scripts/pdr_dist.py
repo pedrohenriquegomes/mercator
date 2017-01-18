@@ -31,6 +31,22 @@ import DatasetHelper
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
+#=============================== chart ========================================
+
+chart_config = {
+  "ChartType": "bar",
+  "ChartOptions": {
+    "scales": {
+      "yAxes": [{
+        "ticks": {
+          "min": 0,
+          "max": 100
+        }
+      }]
+    }
+  }
+}
+
 #=============================== main =========================================
 
 
@@ -40,11 +56,13 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("testbed", help="The name of the testbed data to process", type=str)
+    parser.add_argument("date", help="The date of the dataset", type=str)
     args = parser.parse_args()
 
     # load the dataset
 
-    df = pd.read_csv("{0}/{1}.csv".format(RAW_PATH, args.testbed))
+    raw_file_path = "{0}/{1}/{2}.csv".format(RAW_PATH, args.testbed, args.date)
+    df = pd.read_csv(raw_file_path)
     dtsh = DatasetHelper.helper(df, args.testbed)
 
     # get nodes info
@@ -67,7 +85,7 @@ def main():
 
     # write result
 
-    path = "{0}/{1}/pdr_dist/".format(OUT_PATH, args.testbed)
+    path = "{0}/{1}/{2}/pdr_dist/many_to_many/".format(OUT_PATH, args.testbed, args.date)
     if not os.path.exists(path):
         os.makedirs(path)
     list_results.sort(key=lambda tup: tup[0]) # sort list
@@ -80,6 +98,9 @@ def main():
 
     with open(path + "pdr_dist.json", 'w') as output_file:
         json.dump(json_data, output_file)
+
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 if __name__ == '__main__':
     main()
