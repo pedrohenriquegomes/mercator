@@ -7,8 +7,8 @@
 #   Y: the PDR
 #
 # The generated files are located:
-#   inside processed/<site>/pdr_time/one_to_one/emitter.csv
-#   inside processed/<site>/pdr_time/one_to_many/emitter.csv
+#   inside processed/<site>/<date>/pdr_time/one_to_one/<src_mac>/<dst_mac>/<channel>.json
+#   inside processed/<site>/<date>/pdr_time/one_to_many/<src_mac>/<dst_mac>/<channel>.json
 
 # the format is json:
 #  TODO
@@ -19,8 +19,9 @@ import os
 import argparse
 import json
 import pandas as pd
+import datetime
 
-from DatasetHelper import DatasetHelper
+import DatasetHelper
 
 #=============================== defines ======================================
 
@@ -38,16 +39,17 @@ def main():
     parser.add_argument("testbed", help="The name of the testbed data to process", type=str)
     parser.add_argument("-o2o", "--one_to_one", help="The name of the testbed data to process", action="store_true")
     parser.add_argument("-e", "--emitter", help="The emitting node", type=str)
+    parser.add_argument("date", help="The date of the dataset", type=str)
     args = parser.parse_args()
 
     # load the dataset
 
-    df = pd.read_csv("{0}/{1}.csv".format(RAW_PATH, args.testbed))
-
-    dtsh = DatasetHelper(df, args.testbed)
+    raw_file_path = "{0}/{1}/{2}.csv".format(RAW_PATH, args.testbed, args.date)
+    df = pd.read_csv(raw_file_path)
+    dtsh = DatasetHelper.helper(df, args.testbed)
 
     if args.one_to_one:
-        one_to_one(df, dtsh)
+        one_to_one(dtsh, args.date)
     else:
         one_to_many(df, dtsh, args.emitter)
 
@@ -94,37 +96,39 @@ def one_to_many(df, dtsh, emitter=None):
             json.dump(json_data, output_file)
 
 
-def one_to_one(df, dtsh):
+def one_to_one(dtsh, date):
 
-    # get emitter list
+    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    for link, df_link in group_link:
+        srcmac = link[0]
+        dstmac = link[1]
+        group_freq = df_link.groupby(df_link["frequency"])
+        for freq, df_freq in group_freq:
+            pdr_list = []
+            time_list = []
+            group_trans = df_freq.groupby(df_link["transctr"])
+            for transctr, df_trans in group_trans:
+                # pdr
+                rx_count = len(df_trans.index)
+                pdr = rx_count * 100 / dtsh["tx_count"]
+                pdr_list.append(pdr)
 
-    list_emitters = df["srcmac"].drop_duplicates().tolist()
-
-    # compute result
-
-    for emitter in list_emitters:
-        df_emitter = df[df.srcmac == emitter].copy()
-        dtsh_emt = DatasetHelper(df_emitter)
-        group_rcv = df_emitter.groupby(df_emitter["mac"])
-
-        for receiver, df_receiver in group_rcv:
-            group_freq = df_receiver.groupby(df_receiver["frequency"])
-            rx_count = group_freq.size()
-            frequencies = group_freq.size().index.tolist()
-            pdr = (rx_count * 100 / dtsh_emt.tx_count).tolist()
+                # time
+                t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
+                time_list.append(t)
 
             # write result
 
-            path = "{0}/{1}/pdr_freq/one_to_one/{2}/".format(OUT_PATH, dtsh.testbed, emitter)
+            path = "{0}/{1}/{2}/pdr_freq/one_to_one/{3}/{4}/".format(OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
             if not os.path.exists(path):
                 os.makedirs(path)
             json_data = {
-                "x": map(str, frequencies),
-                "y": pdr,
+                "x": map(str, time_list),
+                "y": pdr_list,
                 "xtitle": "Channels",
                 "ytitle": "PDR"
             }
-            with open(path + "{0}.json".format(receiver), 'w') as output_file:
+            with open(path + "{0}.json".format(freq), 'w') as output_file:
                 json.dump(json_data, output_file)
 
 
