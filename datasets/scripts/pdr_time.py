@@ -119,13 +119,13 @@ def one_to_one(dtsh, date):
 
             # write result
 
-            path = "{0}/{1}/{2}/pdr_freq/one_to_one/{3}/{4}/".format(OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
+            path = "{0}/{1}/{2}/pdr_time/one_to_one/{3}/{4}/".format(OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
             if not os.path.exists(path):
                 os.makedirs(path)
             json_data = {
                 "x": map(str, time_list),
                 "y": pdr_list,
-                "xtitle": "Channels",
+                "xtitle": "Date",
                 "ytitle": "PDR"
             }
             with open(path + "{0}.json".format(freq), 'w') as output_file:
