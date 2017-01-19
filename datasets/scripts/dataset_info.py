@@ -49,7 +49,7 @@ def main():
     raw_file_path = "{0}/{1}/{2}.csv".format(RAW_PATH, args.testbed, args.date)
     df = pd.read_csv(raw_file_path)
     dtsh = DatasetHelper.helper(df, args.testbed)
-    file_size = os.path.getsize(raw_file_path) / (1024*1024)
+    file_size = round(os.path.getsize(raw_file_path) / (1024*1024), 2)
 
     # format collected information
 

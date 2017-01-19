@@ -34,7 +34,7 @@ def helper(df, testbed=None):
     helper["transaction_count"] = len(df.groupby([df["transctr"], df["srcmac"]]))
     start_time = datetime.datetime.strptime(df["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
     end_time = datetime.datetime.strptime(df["timestamp"].iloc[-1], "%Y-%m-%d_%H.%M.%S")
-    helper["duration"] = (end_time - start_time).seconds/3600.0
+    helper["duration"] = round((end_time - start_time).seconds/3600.0, 2)
 
     return helper
 
