@@ -67,9 +67,7 @@ def main():
     else:
         one_to_many(dtsh, args.date)
 
-    path = "{0}/{1}/{2}/pdr_freq/one_to_one/".format(OUT_PATH, dtsh["testbed"], args.date)
-    with open(path + "chart_config.json", 'w') as chart_config_file:
-        json.dump(chart_config, chart_config_file)
+
 
 
 def one_to_many(dtsh, date):
@@ -101,6 +99,10 @@ def one_to_many(dtsh, date):
         }
         with open(path + "{0}.json".format(srcmac), 'w') as output_file:
             json.dump(json_data, output_file)
+
+    path = "{0}/{1}/{2}/pdr_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 
 def one_to_one(dtsh, date):
@@ -134,6 +136,10 @@ def one_to_one(dtsh, date):
         }
         with open(path + "{0}.json".format(dstmac), 'w') as output_file:
             json.dump(json_data, output_file)
+
+    path = "{0}/{1}/{2}/pdr_freq/one_to_one/".format(OUT_PATH, dtsh["testbed"], date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 
 if __name__ == '__main__':
