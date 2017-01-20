@@ -66,7 +66,7 @@ def one_to_many(df, dtsh, emitter=None):
     # compute result
 
     for emitter in list_emitters:
-        df_emitter = df[df.srcmac == emitter]
+        df_emitter = df[df["srcmac"] == emitter]
         df_emitter['timestamp'] = pd.to_datetime(df_emitter['timestamp'], format='%Y-%m-%d_%H.%M.%S')
         df_emitter.set_index('timestamp', inplace=True)
         for n, g in df_emitter.groupby(df_emitter["transctr"]):
@@ -76,14 +76,14 @@ def one_to_many(df, dtsh, emitter=None):
             times = gg.size().index.get_level_values('timestamp').strftime("%Y-%m-%d %H:%M:%S")
             #print rx_count
             #print times
-            pdr = (rx_count * 100 / ((dtsh.node_count - 1) * dtsh.tx_count)).sum()
+            pdr = (rx_count * 100 / ((dtsh["node_count"] - 1) * dtsh["tx_count"])).sum()
             print pdr
 
 
 
         # write result
 
-        path = "{0}/{1}/pdr_time/one_to_many/".format(OUT_PATH, dtsh.testbed)
+        path = "{0}/{1}/pdr_time/one_to_many/".format(OUT_PATH, dtsh["testbed"])
         if not os.path.exists(path):
             os.makedirs(path)
         json_data = {
