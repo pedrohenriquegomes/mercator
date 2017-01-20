@@ -72,7 +72,7 @@ def one_to_many(dtsh, date):
     group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
     for srcmac, df_srcmac in group_srcmac:
 
-        # for each frequency, compute pdr
+        # for each frequency, compute rssi
         list_freq = []
         list_avg_rssi = []
         group_freq = df_srcmac.groupby(df_srcmac["frequency"])
@@ -85,7 +85,7 @@ def one_to_many(dtsh, date):
 
         # write result
 
-        path = "{0}/{1}/{2}/pdr_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
+        path = "{0}/{1}/{2}/rssi_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
         if not os.path.exists(path):
             os.makedirs(path)
         json_data = {
@@ -102,38 +102,43 @@ def one_to_many(dtsh, date):
         json.dump(chart_config, chart_config_file)
 
 
-def one_to_one(df, dtsh):
+def one_to_one(dtsh, date):
 
-    # get emitter list
+    # for each pair of node
+    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    for link, df_link in group_link:
+        srcmac = link[0]
+        dstmac = link[1]
 
-    list_emitters = df["srcmac"].drop_duplicates().tolist()
+        # for each frequency compute rssi
+        list_freq = []
+        list_avg_rssi = []
+        group_freq = df_link.groupby(df_link["frequency"])
+        for freq, df_freq in group_freq:
+            rx_count = len(df_freq)
+            sum_rssi = df_freq.rssi.sum()
+            avg_rssi = round(sum_rssi / rx_count, 0)
+            list_freq.append(freq)
+            list_avg_rssi.append(avg_rssi)
 
-    # compute result
+        # write result
 
-    for emitter in list_emitters:
-        df_emitter = df[df.srcmac == emitter].copy()
-        group_rcv = df_emitter.groupby(df_emitter["mac"])
+        path = "{0}/{1}/{2}/rssi_freq/one_to_one/{3}/".format(OUT_PATH, dtsh["testbed"], date, srcmac)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        json_data = {
+            "x": map(str, list_freq),
+            "y": list_avg_rssi,
+            "xtitle": "Channels",
+            "ytitle": "RSSI Average (dBm)"
+        }
+        with open(path + "{0}.json".format(dstmac), 'w') as output_file:
+            json.dump(json_data, output_file)
 
-        for receiver, df_receiver in group_rcv:
-            group_freq = df_receiver.groupby(df_receiver["frequency"])
-            rx_count = group_freq.size()
-            frequencies = group_freq.size().index.tolist()
-            sum_rssi = group_freq.rssi.sum()
-            avg_rssi = (sum_rssi / rx_count).values.tolist()
+    path = "{0}/{1}/{2}/rssi_freq/one_to_one/".format(OUT_PATH, dtsh["testbed"], date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
-            # write result
-
-            path = "{0}/{1}/rssi_freq/one_to_one/{2}/".format(OUT_PATH, dtsh.testbed, emitter)
-            if not os.path.exists(path):
-                os.makedirs(path)
-            json_data = {
-                    "x": map(str,frequencies),
-                    "y": avg_rssi,
-                    "xtitle": "Channels",
-                    "ytitle": "RSSI Average"
-                    }
-            with open(path+"{0}.json".format(receiver), 'w') as output_file:
-                json.dump(json_data, output_file)
 
 if __name__ == '__main__':
     main()
