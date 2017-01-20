@@ -53,7 +53,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("testbed", help="The name of the testbed data to process", type=str)
     parser.add_argument("-o2o", "--one_to_one", help="The name of the testbed data to process", action="store_true")
-    parser.add_argument("-e", "--emitter", help="The emitting node", type=str)
     parser.add_argument("date", help="The date of the dataset", type=str)
     args = parser.parse_args()
 
@@ -66,39 +65,41 @@ def main():
     if args.one_to_one:
         one_to_one(dtsh, args.date)
     else:
-        one_to_many(df, dtsh, args.emitter)
+        one_to_many(dtsh, args.date)
+
+    path = "{0}/{1}/{2}/pdr_freq/one_to_one/".format(OUT_PATH, dtsh["testbed"], args.date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 
-def one_to_many(df, dtsh, emitter=None):
+def one_to_many(dtsh, date):
 
-    # select emitters
+    # for each source (tx) node
+    group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
+    for srcmac, df_srcmac in group_srcmac:
 
-    if emitter:
-        list_emitters = emitter
-    else:
-        list_emitters = df["srcmac"].drop_duplicates().tolist()
-
-    # compute result
-
-    for emitter in list_emitters:
-        df_emitter = df[df.srcmac == emitter]
-        grouped = df_emitter.groupby(df_emitter["frequency"])
-        rx_count = grouped.size()
-        frequencies = grouped.size().index.tolist()
-        pdr = (rx_count*100/((dtsh["node_count"]-1)*dtsh["tx_count"])).tolist()
+        # for each frequency, compute pdr
+        list_freq = []
+        list_pdr = []
+        group_freq = df_srcmac.groupby(df_srcmac["frequency"])
+        for freq, df_freq in group_freq:
+            rx_count = len(df_freq)
+            pdr = rx_count * 100 / ((dtsh["node_count"]-1)*dtsh["tx_count"])
+            list_freq.append(freq)
+            list_pdr.append(pdr)
 
         # write result
 
-        path = "{0}/{1}/pdr_freq/one_to_many/".format(OUT_PATH, dtsh.testbed)
+        path = "{0}/{1}/{2}/pdr_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
         if not os.path.exists(path):
             os.makedirs(path)
         json_data = {
-              "x": map(str, frequencies),
-              "y": pdr,
+              "x": map(str, list_freq),
+              "y": list_pdr,
               "xtitle": "Channels",
               "ytitle": "PDR"
         }
-        with open(path + "{0}.json".format(emitter), 'w') as output_file:
+        with open(path + "{0}.json".format(srcmac), 'w') as output_file:
             json.dump(json_data, output_file)
 
 
@@ -133,10 +134,6 @@ def one_to_one(dtsh, date):
         }
         with open(path + "{0}.json".format(dstmac), 'w') as output_file:
             json.dump(json_data, output_file)
-
-    path = "{0}/{1}/{2}/pdr_freq/one_to_one/".format(OUT_PATH, dtsh["testbed"], date)
-    with open(path + "chart_config.json", 'w') as chart_config_file:
-        json.dump(chart_config, chart_config_file)
 
 
 if __name__ == '__main__':
