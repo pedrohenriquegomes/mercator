@@ -1,32 +1,48 @@
 #!/usr/bin/python
 
-#============================== description ===================================
+# ============================= description ===================================
 
 # This script generates a new dataset with:
 #   X: the 16 channels
-#   Y: the PDR
+#   Y: the RSSI
 #
-# The generated files are located:
-#   inside processed/site/pdr_freq/emitter.json
+#   inside processed/<site>/<date>/<rssi_freq>/one_to_many/<srcmac>.json
+#   inside processed/<site>/<date>/<rssi_freq>/one_to_one/<srcmac>/<dstmac>.json
 
 # the format is json:
-# {"pdr":{"11":98.5714285714,"12":98.4126984127,...,"26":98.4126984127}}
+# TODO
 
-#=============================== imports ======================================
+# ============================== imports ======================================
 
 import os
 import argparse
 import pandas as pd
 import json
 
-from DatasetHelper import DatasetHelper
+import DatasetHelper
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== main =========================================
+# ============================== chart ========================================
+
+chart_config = {
+  "ChartType": "bar",
+  "ChartOptions": {
+    "scales": {
+      "yAxes": [{
+        "ticks": {
+          "min": 0,
+          "max": 100
+        }
+      }]
+    }
+  }
+}
+
+# ============================== main =========================================
 
 
 def main():
@@ -36,53 +52,54 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("testbed", help="The name of the testbed data to process", type=str)
     parser.add_argument("-o2o", "--one_to_one", help="The name of the testbed data to process", action="store_true")
-    parser.add_argument("-e", "--emitter", help="The emitting node", type=str)
+    parser.add_argument("date", help="The date of the dataset", type=str)
     args = parser.parse_args()
 
     # load the dataset
 
-    df = pd.read_csv("{0}/{1}.csv".format(RAW_PATH, args.testbed))
-
-    dtsh = DatasetHelper(df, args.testbed)
+    raw_file_path = "{0}/{1}/{2}.csv".format(RAW_PATH, args.testbed, args.date)
+    df = pd.read_csv(raw_file_path)
+    dtsh = DatasetHelper.helper(df, args.testbed)
 
     if args.one_to_one:
-        one_to_one(df, dtsh)
+        one_to_one(dtsh, args.date)
     else:
-        one_to_many(df, dtsh, args.emitter)
+        one_to_many(dtsh, args.date)
 
 
-def one_to_many(df, dtsh, emitter=None):
+def one_to_many(dtsh, date):
+    # for each source (tx) node
+    group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
+    for srcmac, df_srcmac in group_srcmac:
 
-    # select emitters
-
-    if emitter:
-        list_emitters = emitter
-    else:
-        list_emitters = df["srcmac"].drop_duplicates().tolist()
-
-    # compute result
-
-    for emitter in list_emitters:
-        df_emitter = df[df.srcmac == emitter]
-        grouped = df_emitter.groupby(df_emitter["frequency"])
-        frequencies = grouped.size().index.tolist()
-        rx_count = grouped.size()
-        sum_rssi = grouped.rssi.sum()
-        avg_rssi = (sum_rssi / rx_count).values.tolist()
+        # for each frequency, compute pdr
+        list_freq = []
+        list_avg_rssi = []
+        group_freq = df_srcmac.groupby(df_srcmac["frequency"])
+        for freq, df_freq in group_freq:
+            rx_count = len(df_freq)
+            sum_rssi = df_freq.rssi.sum()
+            avg_rssi = round(sum_rssi / rx_count, 0)
+            list_freq.append(freq)
+            list_avg_rssi.append(avg_rssi)
 
         # write result
 
-        path = "{0}/{1}/rssi_freq/one_to_many/".format(OUT_PATH, dtsh.testbed)
+        path = "{0}/{1}/{2}/pdr_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
         if not os.path.exists(path):
             os.makedirs(path)
         json_data = {
-            "x": map(str, frequencies),
-            "y": avg_rssi,
+            "x": map(str, list_freq),
+            "y": list_avg_rssi,
             "xtitle": "Channels",
             "ytitle": "RSSI Average (dBm)"
-            }
-        with open(path + "{0}.json".format(emitter), 'w') as output_file:
+        }
+        with open(path + "{0}.json".format(srcmac), 'w') as output_file:
             json.dump(json_data, output_file)
+
+    path = "{0}/{1}/{2}/rssi_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 
 def one_to_one(df, dtsh):
