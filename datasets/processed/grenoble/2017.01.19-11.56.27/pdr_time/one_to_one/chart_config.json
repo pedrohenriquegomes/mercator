@@ -1,1 +1,1 @@
-{"ChartType": "line", "ChartOptions": {"scales": {"xAxes": [{"position": "bottom", "type": "linear"}], "yAxes": [{"ticks": {"ticks": {"max": 100, "min": 0}, "beginAtZero": true}}]}}}
+{"ChartType": "bar", "ChartOptions": {"scales": {"yAxes": [{"ticks": {"max": 100, "min": 0}}]}}}
