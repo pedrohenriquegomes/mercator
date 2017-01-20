@@ -55,5 +55,5 @@ def get_coords(node_list, mac):
 def get_dist(node_list, mac1, mac2):
     mac1_coords = get_coords(node_list, mac1)
     mac2_coords = get_coords(node_list, mac2)
-    dist = distance.euclidean(mac1_coords,mac2_coords)
+    dist = round(distance.euclidean(mac1_coords,mac2_coords),1)
     return dist
