@@ -12,18 +12,22 @@ import { GithubService } from '../github.service';
 export var BarChartComponent = (function () {
     function BarChartComponent(gith) {
         this.gith = gith;
+        this.result = [];
         this.barChartOptions = {
-            scaleShowVerticalLines: false,
             responsive: true,
+            scales: {},
         };
         this.barChartLabels = [];
         this.barChartType = 'bar';
         this.barChartLegend = true;
-        this.barChartData = [
-            { data: [], label: '' },
-        ];
+        this.barChartData = [{ data: [], label: '' }];
     }
-    BarChartComponent.prototype.ngOnChanges = function () {
+    BarChartComponent.prototype.ngOnChanges = function (changes) {
+        if ("exp_type" in changes &&
+            changes["exp_type"].currentValue != undefined &&
+            changes["exp_type"].currentValue != "") {
+            this.load_chart_config();
+        }
         this.load_graph();
     };
     ;
@@ -34,37 +38,81 @@ export var BarChartComponent = (function () {
     BarChartComponent.prototype.chartHovered = function (e) {
         //console.log(e);
     };
+    BarChartComponent.prototype.reload_chart = function () {
+        var _this = this;
+        this.barChartData = [{ data: [], label: '' }];
+        if (this.barChartOptions.scales.xAxes != undefined &&
+            this.barChartOptions.scales.xAxes[0].type == "linear") {
+            this.result.forEach(function (item) {
+                if (item.x.length > 0) {
+                    // format graph data
+                    var data_list = [];
+                    for (var i = 0; i < item.x.length; i++) {
+                        data_list.push({ x: item.x[i], y: item.y[i] });
+                    }
+                    _this.barChartData.push({ data: data_list, label: item.ytitle + " over " + item.xtitle });
+                }
+            });
+        }
+        else {
+            this.result.forEach(function (item) {
+                _this.barChartData.push({ data: item.y, label: item.ytitle + " over " + item.xtitle });
+                _this.barChartLabels = item.x;
+            });
+        }
+    };
+    BarChartComponent.prototype.load_chart_config = function () {
+        var _this = this;
+        var url = "https://raw.githubusercontent.com/openwsn-berkeley/mercator/data/datasets/processed/";
+        var url_args = [this.site, this.date, this.exp, this.exp_type];
+        this.gith.download_url(url + url_args.join("/") + "/" + "chart_config.json").subscribe(function (res) {
+            _this.barChartOptions = Object.assign({}, _this.barChartOptions, res.ChartOptions);
+            _this.barChartType = res.ChartType;
+        }, function (error) { console.log("Can not find chart option file."); });
+    };
     BarChartComponent.prototype.load_graph = function () {
         var _this = this;
         var url = "https://raw.githubusercontent.com/openwsn-berkeley/mercator/data/datasets/processed/";
-        this.barChartData = [{ data: [], label: '' }];
+        var url_args = [this.site, this.date, this.exp, this.exp_type];
+        this.result = [];
         if (this.exp_type == "one_to_one") {
-            if (this.dst_mac_list.length > 0) {
-                for (var i = 0; i < this.dst_mac_list.length; i++) {
-                    this.gith.download_url(url +
-                        this.site + "/" +
-                        this.date + "/" +
-                        this.exp + "/" +
-                        this.exp_type + "/" +
-                        this.src_mac + "/" +
-                        this.dst_mac_list[i] + ".json").subscribe(function (res) {
-                        _this.barChartLabels = res.x;
-                        _this.barChartData.push({ data: res.y, label: res.ytitle });
-                        console.log(_this.barChartData);
+            var _loop_1 = function(i) {
+                var url_args_full = url_args.concat(this_1.src_mac, this_1.dst_mac_list[i]);
+                if (this_1.exp == "pdr_time") {
+                    this_1.gith.getFiles(url_args_full.join('/')).subscribe(function (res) {
+                        res.forEach(function (f) {
+                            _this.gith.download_url(url + url_args_full.join('/') + "/" + f.name).subscribe(function (res) {
+                                _this.result.push(res);
+                                _this.reload_chart();
+                            });
+                        });
                     });
                 }
-                ;
+                else {
+                    this_1.gith.download_url(url + url_args_full.join('/') + ".json").subscribe(function (res) {
+                        _this.result.push(res);
+                        _this.reload_chart();
+                    });
+                }
+            };
+            var this_1 = this;
+            for (var i = 0; i < this.dst_mac_list.length; i++) {
+                _loop_1(i);
+            }
+        }
+        else if (this.exp_type == "one_to_many") {
+            if (this.src_mac != "") {
+                var url_args_full = url_args.concat(this.src_mac);
+                this.gith.download_url(url + url_args_full.join('/') + ".json").subscribe(function (res) {
+                    _this.result.push(res);
+                    _this.reload_chart();
+                });
             }
         }
         else if (this.exp_type == "many_to_many") {
-            this.gith.download_url(url +
-                this.site + "/" +
-                this.date + "/" +
-                this.exp + "/" +
-                this.exp + ".json").subscribe(function (res) {
-                _this.barChartLabels = res.x;
-                _this.barChartData.push({ data: res.y, label: res.ytitle });
-                console.log(_this.barChartData);
+            this.gith.download_url(url + url_args.join("/") + "/" + this.exp + ".json").subscribe(function (res) {
+                _this.result.push(res);
+                _this.reload_chart();
             });
         }
     };

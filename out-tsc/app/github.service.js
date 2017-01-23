@@ -20,13 +20,13 @@ export var GithubService = (function () {
         return this._http.get(url)
             .map(function (r) { return r.json(); });
     };
-    GithubService.prototype.getExps = function (site) {
-        var url = this.b_url + "/" + site + "?ref=data";
+    GithubService.prototype.getExps = function (site, date) {
+        var url = this.b_url + "/" + site + "/" + date + "?ref=data";
         return this._http.get(url)
             .map(function (r) { return r.json(); });
     };
-    GithubService.prototype.getTypes = function (site, exp) {
-        var url = this.b_url + "/" + site + "/" + exp + "?ref=data";
+    GithubService.prototype.getTypes = function (site, date, exp) {
+        var url = this.b_url + "/" + site + "/" + date + "/" + exp + "?ref=data";
         return this._http.get(url)
             .map(function (r) { return r.json(); });
     };

@@ -12,13 +12,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IndexComponent } from './index/index.component';
-import { MotemapComponent } from './motemap/motemap.component';
 import { DatasetSelectorComponent } from "./dataset-selector/dataset-selector.component";
 var routes = [
-    { path: '', pathMatch: 'full', component: IndexComponent },
-    { path: 'site/:site/:date', component: MotemapComponent },
-    { path: 'datasets', component: DatasetSelectorComponent }
+    { path: '', pathMatch: 'full', component: DatasetSelectorComponent },
+    { path: ':site', component: DatasetSelectorComponent },
+    { path: ':site/:date', component: DatasetSelectorComponent },
+    { path: ':site/:date/:exp', component: DatasetSelectorComponent },
+    { path: ':site/:date/:exp/:type', component: DatasetSelectorComponent },
 ];
 export var AppRoutingModule = (function () {
     function AppRoutingModule() {
