@@ -31,11 +31,11 @@ OUT_PATH = "../processed"
 chart_config = {
   "ChartType": "line",
   "ChartOptions": {
-    "showLines": False,
     "scales": {
       "xAxes": [{
         "type": 'linear',
-        "position": 'bottom'
+        "position": 'bottom',
+        "ticks": {"max": 0, "min": -100}
       }],
       "yAxes": [{
         "ticks": {
@@ -43,7 +43,8 @@ chart_config = {
           "ticks": {"max": 100, "min": 0}
         }
       }]
-    }
+    },
+    "showLines": False,
   }
 }
 
