@@ -7,7 +7,7 @@
 #   Y: the PDR
 #
 # The generated file is located here:
-#    processed/<site>/<date>/pdr_rssi/many_to_many/waterfall.json
+#    processed/<site>/<date>/pdr_rssi/many_to_many/pdr_rssi.json
 
 # the format is json:
 #  { x: [], y: [], xtitle:"", ytitle:""}
@@ -91,7 +91,7 @@ def main():
         "ytitle": "PDR (%)"
     }
 
-    with open(path + "waterfall.json", 'w') as output_file:
+    with open(path + "pdr_rssi.json", 'w') as output_file:
         json.dump(json_data, output_file)
 
     with open(path + "chart_config.json", 'w') as chart_config_file:
