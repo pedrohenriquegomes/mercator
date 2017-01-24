@@ -7,10 +7,10 @@
 #   Y: the PDR
 #
 # The generated file is located here:
-#    processed/<site>/pdr_rssi/waterfall.json
+#    processed/<site>/<date>/pdr_rssi/many_to_many/waterfall.json
 
 # the format is json:
-#  TODO
+#  { x: [], y: [], xtitle:"", ytitle:""}
 
 #=============================== imports ======================================
 
@@ -19,12 +19,32 @@ import argparse
 import pandas as pd
 import json
 
-from DatasetHelper import DatasetHelper
+import DatasetHelper
 
 #=============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
+
+#=============================== chart ========================================
+
+chart_config = {
+  "ChartType": "line",
+  "ChartOptions": {
+    "scales": {
+      "xAxes": [{
+        "type": 'linear',
+        "position": 'bottom'
+      }],
+      "yAxes": [{
+        "ticks": {
+          "beginAtZero":True,
+          "ticks": {"max": 100, "min": 0}
+        }
+      }]
+    }
+  }
+}
 
 #=============================== main =========================================
 
@@ -35,12 +55,14 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("testbed", help="The name of the testbed data to process", type=str)
+    parser.add_argument("date", help="The date of the dataset", type=str)
     args = parser.parse_args()
 
     # load the dataset
 
-    df = pd.read_csv("{0}/{1}.csv".format(RAW_PATH, args.testbed))
-    dtsh = DatasetHelper(df, args.testbed)
+    raw_file_path = "{0}/{1}/{2}.csv".format(RAW_PATH, args.testbed, args.date)
+    df = pd.read_csv(raw_file_path)
+    dtsh = DatasetHelper.helper(df, args.testbed)
 
     # init results
 
@@ -49,17 +71,17 @@ def main():
 
     # compute PDR and average RSSI by transaction
 
-    transaction = dtsh.data.groupby([dtsh.data["transctr"], dtsh.data["srcmac"]])
+    transaction = dtsh["data"].groupby([dtsh["data"]["transctr"], dtsh["data"]["srcmac"]])
     for name, group in transaction:
         mean_rssi = group["rssi"].mean().tolist()
         rx_count = len(group)
-        pdr = (rx_count * 100) / ((dtsh.node_count - 1) * dtsh.tx_count)
+        pdr = (rx_count * 100) / ((dtsh["node_count"] - 1) * dtsh["tx_count"])
         list_pdr.append(pdr)
         list_rssi.append(mean_rssi)
 
     # write result
 
-    path = "{0}/{1}/pdr_rssi/".format(OUT_PATH, dtsh.testbed)
+    path = "{0}/{1}/{2}/pdr_rssi/many_to_many/".format(OUT_PATH, args.testbed, args.date)
     if not os.path.exists(path):
         os.makedirs(path)
     json_data = {
@@ -71,6 +93,9 @@ def main():
 
     with open(path + "waterfall.json", 'w') as output_file:
         json.dump(json_data, output_file)
+
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 if __name__ == '__main__':
     main()
