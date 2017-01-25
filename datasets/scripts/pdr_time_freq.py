@@ -85,42 +85,41 @@ def main():
         one_to_many(dtsh, args.date)
 
 
-def one_to_many(df, dtsh, emitter=None):
+def one_to_many(dtsh, date):
+    # for each source (tx) node
+    group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
+    for srcmac, df_srcmac in group_srcmac:
+        group_freq = df_srcmac.groupby(df_srcmac["frequency"])
+        for freq, df_freq in group_freq:
+            pdr_list = []
+            time_list = []
+            group_trans = df_freq.groupby(df_freq["transctr"])
+            for transctr, df_trans in group_trans:
+                # pdr
+                rx_count = len(df_trans.index)
+                pdr = rx_count * 100 / ((dtsh["node_count"] - 1) * dtsh["tx_count"])
+                pdr_list.append(pdr)
 
-    # select emitters
+                # time
+                t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
+                time_list.append(t)
 
-    if emitter:
-        list_emitters = emitter
-    else:
-        list_emitters = df["srcmac"].drop_duplicates().tolist()
+            # write result
 
-    # compute result
+            path = "{0}/{1}/{2}/pdr_time_freq/one_to_many/{3}/".format(OUT_PATH, dtsh["testbed"], date, srcmac)
+            if not os.path.exists(path):
+                os.makedirs(path)
+            json_data = {
+                  "x": map(str, time_list),
+                  "y": pdr_list,
+                  "label": srcmac,
+            }
+            with open(path + "{0}.json".format(freq), 'w') as output_file:
+                json.dump(json_data, output_file)
 
-    for emitter in list_emitters:
-        df_emitter = df[df["srcmac"] == emitter]
-        df_emitter['timestamp'] = pd.to_datetime(df_emitter['timestamp'], format='%Y-%m-%d_%H.%M.%S')
-        df_emitter.set_index('timestamp', inplace=True)
-        for n, g in df_emitter.groupby(df_emitter["transctr"]):
-            gg = g.groupby(pd.TimeGrouper(freq='3S'))
-            rx_count = gg.size()
-            #times = gg.size().index.tolist()
-            times = gg.size().index.get_level_values('timestamp').strftime("%Y-%m-%d %H:%M:%S")
-            #print rx_count
-            #print times
-            pdr = (rx_count * 100 / ((dtsh["node_count"] - 1) * dtsh["tx_count"])).sum()
-
-        # write result
-
-        path = "{0}/{1}/pdr_time_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"])
-        if not os.path.exists(path):
-            os.makedirs(path)
-        json_data = {
-              "x": map(str, times),
-              "y": pdr,
-              "label": emitter,
-        }
-        with open(path + "{0}.json".format(emitter), 'w') as output_file:
-            json.dump(json_data, output_file)
+    path = "{0}/{1}/{2}/pdr_time_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 
 def one_to_one(dtsh, date):
