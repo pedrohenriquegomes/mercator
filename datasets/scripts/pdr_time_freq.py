@@ -7,8 +7,8 @@
 #   Y: the PDR
 #
 # The generated files are located:
-#   inside processed/<site>/<date>/pdr_time/one_to_one/<src_mac>/<dst_mac>/<channel>.json
-#   inside processed/<site>/<date>/pdr_time/one_to_many/<src_mac>/<dst_mac>/<channel>.json
+#   inside processed/<site>/<date>/pdr_time_freq/one_to_one/<src_mac>/<dst_mac>/<channel>.json
+#   inside processed/<site>/<date>/pdr_time_freq/one_to_many/<src_mac>/<dst_mac>/<channel>.json
 
 # the format is json:
 #  TODO
@@ -83,7 +83,7 @@ def one_to_many(df, dtsh, emitter=None):
 
         # write result
 
-        path = "{0}/{1}/pdr_time/one_to_many/".format(OUT_PATH, dtsh["testbed"])
+        path = "{0}/{1}/pdr_time_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"])
         if not os.path.exists(path):
             os.makedirs(path)
         json_data = {
@@ -119,7 +119,7 @@ def one_to_one(dtsh, date):
 
             # write result
 
-            path = "{0}/{1}/{2}/pdr_time/one_to_one/{3}/{4}/".format(OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
+            path = "{0}/{1}/{2}/pdr_time_freq/one_to_one/{3}/{4}/".format(OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
             if not os.path.exists(path):
                 os.makedirs(path)
             json_data = {
