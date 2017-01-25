@@ -28,6 +28,24 @@ import DatasetHelper
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
+#=============================== chart ========================================
+
+chart_config = {
+  "ChartType": "line",
+  "ChartOptions": {
+    "scales": {
+      "yAxes": [{
+        "ticks": {
+          "beginAtZero": True,
+          "ticks": {"max": 100, "min": 0}
+        }
+      }]
+    },
+    "showLines": False,
+    "stacked": True,
+  }
+}
+
 #=============================== main =========================================
 
 
@@ -90,7 +108,8 @@ def one_to_many(df, dtsh, emitter=None):
               "x": map(str, times),
               "y": pdr,
               "xtitle": "Time",
-              "ytitle": "PDR"
+              "ytitle": "PDR",
+              "label": emitter,
         }
         with open(path + "{0}.json".format(emitter), 'w') as output_file:
             json.dump(json_data, output_file)
@@ -126,10 +145,15 @@ def one_to_one(dtsh, date):
                 "x": map(str, time_list),
                 "y": pdr_list,
                 "xtitle": "Date",
-                "ytitle": "PDR"
+                "ytitle": "PDR",
+                "label": dstmac
             }
             with open(path + "{0}.json".format(freq), 'w') as output_file:
                 json.dump(json_data, output_file)
+
+    path = "{0}/{1}/{2}/pdr_time_freq/one_to_one/".format(OUT_PATH, dtsh["testbed"], date)
+    with open(path + "chart_config.json", 'w') as chart_config_file:
+        json.dump(chart_config, chart_config_file)
 
 
 if __name__ == '__main__':
