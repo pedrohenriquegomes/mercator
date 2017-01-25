@@ -38,8 +38,6 @@ chart_config = {
   "ChartOptions": {
     "scales": {
       "xAxes": [{
-        "type": 'linear',
-        "position": 'bottom',
         "scaleLabel": {
             "display": True,
             "labelString" : 'Channels'

@@ -33,7 +33,7 @@ OUT_PATH = "../processed"
 #=============================== chart ========================================
 
 chart_config = {
-  "ChartType": "bar",
+  "ChartType": "line",
   "ChartOptions": {
     "scales": {
       "xAxes": [{
@@ -54,7 +54,8 @@ chart_config = {
           "max": 100
         }
       }]
-    }
+    },
+    "showLines": False,
   }
 }
 
