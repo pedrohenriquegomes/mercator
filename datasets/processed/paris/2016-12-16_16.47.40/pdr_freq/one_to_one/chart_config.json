@@ -1,1 +1,1 @@
-{"ChartType": "bar", "ChartOptions": {"scales": {"yAxes": [{"ticks": {"max": 100, "min": 0}}]}}}
+{"ChartType": "bar", "ChartOptions": {"scales": {"xAxes": [{"position": "bottom", "scaleLabel": {"display": true, "labelString": "Channels"}, "type": "linear"}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}, "ticks": {"max": 100, "min": 0}}]}}}
