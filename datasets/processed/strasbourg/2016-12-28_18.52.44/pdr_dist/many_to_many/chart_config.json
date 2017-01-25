@@ -1,1 +1,1 @@
-{"ChartType": "line", "ChartOptions": {"scales": {"xAxes": [{"position": "bottom", "type": "linear"}], "yAxes": [{"ticks": {"ticks": {"max": 100, "min": 0}, "beginAtZero": true}}]}}}
+{"ChartType": "bar", "ChartOptions": {"scales": {"xAxes": [{"scaleLabel": {"display": true, "labelString": "distance (m)"}}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}, "ticks": {"max": 100, "min": 0}}]}}}
