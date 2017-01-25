@@ -34,7 +34,17 @@ chart_config = {
   "ChartType": "line",
   "ChartOptions": {
     "scales": {
+      "xAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'Date'
+        },
+      }],
       "yAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'PDR (%)'
+        },
         "ticks": {
           "beginAtZero": True,
           "ticks": {"max": 100, "min": 0}
@@ -107,8 +117,6 @@ def one_to_many(df, dtsh, emitter=None):
         json_data = {
               "x": map(str, times),
               "y": pdr,
-              "xtitle": "Time",
-              "ytitle": "PDR",
               "label": emitter,
         }
         with open(path + "{0}.json".format(emitter), 'w') as output_file:
@@ -144,8 +152,6 @@ def one_to_one(dtsh, date):
             json_data = {
                 "x": map(str, time_list),
                 "y": pdr_list,
-                "xtitle": "Date",
-                "ytitle": "PDR",
                 "label": dstmac
             }
             with open(path + "{0}.json".format(freq), 'w') as output_file:

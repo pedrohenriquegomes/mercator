@@ -6,11 +6,16 @@
 #   X: the 16 channels
 #   Y: the RSSI
 #
+# The generated files are located:
 #   inside processed/<site>/<date>/<rssi_freq>/one_to_many/<srcmac>.json
 #   inside processed/<site>/<date>/<rssi_freq>/one_to_one/<srcmac>/<dstmac>.json
-
+#
 # the format is json:
-# TODO
+# {
+#   'x': [],
+#   'y': [],
+#   'label': ""
+# }
 
 # ============================== imports ======================================
 
@@ -32,10 +37,20 @@ chart_config = {
   "ChartType": "bar",
   "ChartOptions": {
     "scales": {
+      "xAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'Channels'
+        },
+      }],
       "yAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'RSSI Average (dBm)'
+        },
         "ticks": {
           "min": -100,
-          "max": 0
+          "max": 20
         }
       }]
     }
@@ -91,8 +106,7 @@ def one_to_many(dtsh, date):
         json_data = {
             "x": map(str, list_freq),
             "y": list_avg_rssi,
-            "xtitle": "Channels",
-            "ytitle": "RSSI Average (dBm)"
+            "label": srcmac
         }
         with open(path + "{0}.json".format(srcmac), 'w') as output_file:
             json.dump(json_data, output_file)
@@ -129,8 +143,7 @@ def one_to_one(dtsh, date):
         json_data = {
             "x": map(str, list_freq),
             "y": list_avg_rssi,
-            "xtitle": "Channels",
-            "ytitle": "RSSI Average (dBm)"
+            "label": dstmac
         }
         with open(path + "{0}.json".format(dstmac), 'w') as output_file:
             json.dump(json_data, output_file)

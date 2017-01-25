@@ -13,8 +13,7 @@
 # {
 #   'x': [],
 #   'y': [],
-#   'xtitle': "distance (m)"
-#   'ytitle': "PDR (%)"
+#   'label': ""
 # }
 
 #=============================== imports ======================================
@@ -37,7 +36,19 @@ chart_config = {
   "ChartType": "bar",
   "ChartOptions": {
     "scales": {
+      "xAxes": [{
+        "type": 'linear',
+        "position": 'bottom',
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'distance (m)'
+        },
+      }],
       "yAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'PDR (%)'
+        },
         "ticks": {
           "min": 0,
           "max": 100
@@ -92,8 +103,7 @@ def main():
     json_data = {
         "x": map(str,[res[0] for res in list_results]),
         "y": [res[1] for res in list_results],
-        "xtitle": "distance (m)",
-        "ytitle": "PDR (%)"
+        "label": ""
     }
 
     with open(path + "pdr_dist.json", 'w') as output_file:

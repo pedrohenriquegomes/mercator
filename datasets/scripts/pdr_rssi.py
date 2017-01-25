@@ -10,7 +10,7 @@
 #    processed/<site>/<date>/pdr_rssi/many_to_many/pdr_rssi.json
 
 # the format is json:
-#  { x: [], y: [], xtitle:"", ytitle:""}
+#  { x: [], y: [], label:""}
 
 #=============================== imports ======================================
 
@@ -33,11 +33,19 @@ chart_config = {
   "ChartOptions": {
     "scales": {
       "xAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'RSSI (dBm)'
+        },
         "type": 'linear',
         "position": 'bottom',
-        "ticks": {"max": 0, "min": -100}
+        "ticks": {"max": 20, "min": -100}
       }],
       "yAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'PDR (%)'
+        },
         "ticks": {
           "beginAtZero": True,
           "ticks": {"max": 100, "min": 0}
@@ -89,8 +97,7 @@ def main():
     json_data = {
         "x": map(str, list_rssi),
         "y": list_pdr,
-        "xtitle": "RSSI (dBm)",
-        "ytitle": "PDR (%)"
+        "label": "Waterfall plot"
     }
 
     with open(path + "pdr_rssi.json", 'w') as output_file:

@@ -10,8 +10,12 @@
 #   inside processed/<site>/<date>/<pdr_freq>/one_to_many/<srcmac>.json
 #   inside processed/<site>/<date>/<pdr_freq>/one_to_one/<srcmac>/<dstmac>.json
 #
-# the format is csv (16 lines):
-#   frequency,pdr
+# the format is json:
+# {
+#   'x': [],
+#   'y': [],
+#   'label': ""
+# }
 
 # ============================== imports ======================================
 
@@ -33,7 +37,19 @@ chart_config = {
   "ChartType": "bar",
   "ChartOptions": {
     "scales": {
+      "xAxes": [{
+        "type": 'linear',
+        "position": 'bottom',
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'Channels'
+        },
+      }],
       "yAxes": [{
+        "scaleLabel": {
+            "display": True,
+            "labelString" : 'PDR (%)'
+        },
         "ticks": {
           "min": 0,
           "max": 100
@@ -94,8 +110,7 @@ def one_to_many(dtsh, date):
         json_data = {
               "x": map(str, list_freq),
               "y": list_pdr,
-              "xtitle": "Channels",
-              "ytitle": "PDR"
+              "label": srcmac
         }
         with open(path + "{0}.json".format(srcmac), 'w') as output_file:
             json.dump(json_data, output_file)
@@ -131,8 +146,7 @@ def one_to_one(dtsh, date):
         json_data = {
             "x": map(str, list_freq),
             "y": list_pdr,
-            "xtitle": "Channels",
-            "ytitle": "PDR"
+            "label": dstmac
         }
         with open(path + "{0}.json".format(dstmac), 'w') as output_file:
             json.dump(json_data, output_file)
