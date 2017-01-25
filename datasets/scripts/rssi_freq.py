@@ -66,7 +66,8 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("testbed", help="The name of the testbed data to process", type=str)
-    parser.add_argument("-o2o", "--one_to_one", help="The name of the testbed data to process", action="store_true")
+    parser.add_argument("-o2o", "--one_to_one", help="Run for every pair of node", action="store_true")
+    parser.add_argument("-o2m", "--one_to_many", help="Run for every transmitting node", action="store_true")
     parser.add_argument("date", help="The date of the dataset", type=str)
     args = parser.parse_args()
 
@@ -76,9 +77,12 @@ def main():
     df = pd.read_csv(raw_file_path)
     dtsh = DatasetHelper.helper(df, args.testbed)
 
-    if args.one_to_one:
+    if args.one_to_one and not args.one_to_many:
         one_to_one(dtsh, args.date)
+    elif args.one_to_many and not args.one_to_one:
+        one_to_many(dtsh, args.date)
     else:
+        one_to_one(dtsh, args.date)
         one_to_many(dtsh, args.date)
 
 
