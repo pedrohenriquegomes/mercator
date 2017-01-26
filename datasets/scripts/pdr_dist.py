@@ -104,7 +104,7 @@ def main():
     json_data = {
         "x": map(str,[res[0] for res in list_results]),
         "y": [res[1] for res in list_results],
-        "label": ""
+        "label": "PDR over distance"
     }
 
     with open(path + "pdr_dist.json", 'w') as output_file:
