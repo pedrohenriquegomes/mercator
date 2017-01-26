@@ -50,7 +50,7 @@ chart_config = {
         },
         "ticks": {
           "min": -100,
-          "max": 20
+          "max": -20
         }
       }]
     }

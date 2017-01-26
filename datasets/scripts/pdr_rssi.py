@@ -39,7 +39,7 @@ chart_config = {
         },
         "type": 'linear',
         "position": 'bottom',
-        "ticks": {"max": 20, "min": -100}
+        "ticks": {"max": -20, "min": -100}
       }],
       "yAxes": [{
         "scaleLabel": {
