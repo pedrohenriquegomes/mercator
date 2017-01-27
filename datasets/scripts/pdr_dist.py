@@ -83,7 +83,8 @@ def main():
 
     # init results
 
-    list_results = []
+    list_pdr = []
+    list_dist = []
 
     # compute PDR and distance for each link
 
@@ -93,17 +94,18 @@ def main():
         rx_count = len(df_link)
         pdr = (rx_count * 100) / (dtsh_link["tx_count"] * dtsh_link["transaction_count"])
         dist = DatasetHelper.get_dist(node_list, name[0], name[1])
-        list_results.append((dist,pdr))
+        list_pdr.append(pdr)
+        list_dist.append(dist)
 
     # write result
 
     path = "{0}/{1}/{2}/pdr_dist/many_to_many/".format(OUT_PATH, args.testbed, args.date)
     if not os.path.exists(path):
         os.makedirs(path)
-    list_results.sort(key=lambda tup: tup[0]) # sort list
+
     json_data = {
-        "x": map(str,[res[0] for res in list_results]),
-        "y": [res[1] for res in list_results],
+        "x": list_dist,
+        "y": list_pdr,
         "label": "PDR over distance"
     }
 
