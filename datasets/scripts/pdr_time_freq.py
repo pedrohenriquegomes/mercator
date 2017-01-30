@@ -146,7 +146,7 @@ def one_to_one(dtsh, date):
             json_data = {
                 "x": map(str, time_list),
                 "y": pdr_list,
-                "label": dstmac
+                "label": transctr,
             }
             with open(path + "{0}.json".format(freq), 'w') as output_file:
                 json.dump(json_data, output_file)
