@@ -33,6 +33,7 @@ OUT_PATH = "../processed"
 chart_config = {
   "ChartType": "line",
   "ChartOptions": {
+    "fill": False,
     "scales": {
       "xAxes": [{
         "scaleLabel": {
@@ -41,17 +42,12 @@ chart_config = {
         },
       }],
       "yAxes": [{
-        "stacked": True,
         "scaleLabel": {
             "display": True,
             "labelString" : 'PDR (%)'
         },
-        "ticks": {
-          "display": False
-        },
       }]
     },
-    "showLines": False,
   }
 }
 

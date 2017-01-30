@@ -1,1 +1,1 @@
-{"ChartType": "line", "ChartOptions": {"showLines": false, "scales": {"xAxes": [{"scaleLabel": {"display": true, "labelString": "Date"}}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}, "ticks": {"display": false}, "stacked": true}]}}}
+{"ChartType": "line", "ChartOptions": {"scales": {"xAxes": [{"scaleLabel": {"display": true, "labelString": "Date"}}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}}]}, "fill": false}}
