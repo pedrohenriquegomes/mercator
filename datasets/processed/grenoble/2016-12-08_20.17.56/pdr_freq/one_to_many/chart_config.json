@@ -1,0 +1,1 @@
+{"ChartType": "bar", "ChartOptions": {"scales": {"xAxes": [{"scaleLabel": {"display": true, "labelString": "Channels"}}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}, "ticks": {"max": 100, "min": 0}}]}}}

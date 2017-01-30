@@ -1,1 +1,1 @@
-{"y": [1600, 1600], "x": ["0.0", "0.0"], "xtitle": "distance (m)", "ytitle": "PDR (%)"}
+{"y": [1600, 1600], "x": [0.8, 0.8], "label": "PDR over distance"}

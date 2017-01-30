@@ -1,0 +1,1 @@
+{"ChartType": "bar", "ChartOptions": {"scales": {"xAxes": [{"scaleLabel": {"display": true, "labelString": "Channels"}}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "RSSI Average (dBm)"}, "ticks": {"max": -20, "min": -100}}]}}}
