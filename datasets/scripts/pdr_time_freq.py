@@ -46,6 +46,10 @@ chart_config = {
             "display": True,
             "labelString" : 'PDR (%)'
         },
+        "ticks": {
+          "min": 0,
+          "max": 100
+        },
       }]
     },
   }
