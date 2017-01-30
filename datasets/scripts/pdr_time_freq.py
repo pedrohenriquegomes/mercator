@@ -111,7 +111,7 @@ def one_to_many(dtsh, date):
             json_data = {
                   "x": map(str, time_list),
                   "y": pdr_list,
-                  "label": srcmac,
+                  "label": freq,
             }
             with open(path + "{0}.json".format(freq), 'w') as output_file:
                 json.dump(json_data, output_file)
