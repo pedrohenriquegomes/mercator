@@ -41,18 +41,17 @@ chart_config = {
         },
       }],
       "yAxes": [{
+        "stacked": True,
         "scaleLabel": {
             "display": True,
             "labelString" : 'PDR (%)'
         },
         "ticks": {
-          "beginAtZero": True,
-          "ticks": {"max": 100, "min": 0}
-        }
+          "display": False
+        },
       }]
     },
     "showLines": False,
-    "stacked": True,
   }
 }
 
