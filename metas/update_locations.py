@@ -38,6 +38,7 @@ for site in site_list:
             del mote["mobility_type"]
             del mote["site"]
             del mote["uid"]
+            del mote["state"]
 
             # get mote eui64
             hostname = mote["network_address"].split(".")[0]
