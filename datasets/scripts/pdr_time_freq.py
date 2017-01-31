@@ -36,6 +36,7 @@ chart_config = {
     "fill": False,
     "scales": {
       "xAxes": [{
+        "type": "time",
         "scaleLabel": {
             "display": True,
             "labelString" : 'Date'
