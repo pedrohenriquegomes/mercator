@@ -92,7 +92,8 @@ def main():
     for name, df_link in group_link:
         dtsh_link = DatasetHelper.helper(df_link, args.testbed)
         rx_count = len(df_link)
-        pdr = (rx_count * 100) / (dtsh_link["tx_count"] * dtsh_link["transaction_count"])
+        tx_count = dtsh_link["tx_count"] * dtsh_link["transaction_count"] * dtsh_link["channel_count"]
+        pdr = rx_count * 100 / tx_count
         dist = DatasetHelper.get_dist(node_list, name[0], name[1])
         list_pdr.append(pdr)
         list_dist.append(dist)
