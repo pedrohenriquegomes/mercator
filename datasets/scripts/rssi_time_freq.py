@@ -85,15 +85,22 @@ def main():
 
 
 def one_to_many(dtsh, date):
+
     # for each source (tx) node
     group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
     for srcmac, df_srcmac in group_srcmac:
+
+        # for each channel
         group_freq = df_srcmac.groupby(df_srcmac["frequency"])
         for freq, df_freq in group_freq:
+
             pdr_list = []
             time_list = []
+
+            # for each transaction
             group_trans = df_freq.groupby(df_freq["transctr"])
             for transctr, df_trans in group_trans:
+
                 # pdr
                 rx_count = len(df_trans.index)
                 pdr = rx_count * 100 / ((dtsh["node_count"] - 1) * dtsh["tx_count"])
@@ -104,7 +111,6 @@ def one_to_many(dtsh, date):
                 time_list.append(t)
 
             # write result
-
             path = "{0}/{1}/{2}/pdr_time_freq/one_to_many/{3}/".format(OUT_PATH, dtsh["testbed"], date, srcmac)
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -116,6 +122,7 @@ def one_to_many(dtsh, date):
             with open(path + "{0}.json".format(freq), 'w') as output_file:
                 json.dump(json_data, output_file)
 
+    # write chart_config
     path = "{0}/{1}/{2}/pdr_time_freq/one_to_many/".format(OUT_PATH, dtsh["testbed"], date)
     with open(path + "chart_config.json", 'w') as chart_config_file:
         json.dump(chart_config, chart_config_file)
@@ -150,7 +157,7 @@ def one_to_one(dtsh, date):
             json_data = {
                 "x": map(str, time_list),
                 "y": pdr_list,
-                "label": freq,
+                "label": transctr,
             }
             with open(path + "{0}.json".format(freq), 'w') as output_file:
                 json.dump(json_data, output_file)
