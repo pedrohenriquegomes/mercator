@@ -26,12 +26,12 @@ import json
 
 import DatasetHelper
 
-#=============================== defines ======================================
+# =============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== chart ========================================
+# ============================== chart ========================================
 
 chart_config = {
   "ChartType": "bar",
@@ -40,13 +40,13 @@ chart_config = {
       "xAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'Channels'
+            "labelString": 'Channels'
         },
       }],
       "yAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'PDR (%)'
+            "labelString": 'PDR (%)'
         },
         "ticks": {
           "min": 0,
@@ -57,7 +57,7 @@ chart_config = {
   }
 }
 
-#=============================== main =========================================
+# ============================== main =========================================
 
 
 def main():
