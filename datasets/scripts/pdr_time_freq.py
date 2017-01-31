@@ -135,7 +135,7 @@ def one_to_one(dtsh, date):
             for transctr, df_trans in group_trans:
                 # pdr
                 rx_count = len(df_trans.index)
-                pdr = rx_count * 100 / dtsh["tx_count"]
+                pdr = rx_count * 100 / (dtsh["tx_count"] * dtsh["channel_count"])
                 pdr_list.append(pdr)
 
                 # time
