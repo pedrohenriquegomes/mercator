@@ -1,0 +1,1 @@
+{"ChartType": "line", "ChartOptions": {"scales": {"xAxes": [{"scaleLabel": {"display": true, "labelString": "Date"}}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}, "ticks": {"max": 100, "min": 0}}]}, "fill": false}}
