@@ -33,7 +33,9 @@ OUT_PATH = "../processed"
 chart_config = {
   "ChartType": "line",
   "ChartOptions": {
-    "fill": False,
+    "elements":{
+      "line": {"fill": False}
+    },
     "scales": {
       "xAxes": [{
         "type": "time",
