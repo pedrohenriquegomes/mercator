@@ -40,13 +40,13 @@ chart_config = {
       "xAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'Channels'
+            "labelString": 'Channels'
         },
       }],
       "yAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'RSSI Average (dBm)'
+            "labelString": 'RSSI Average (dBm)'
         },
         "ticks": {
           "min": -100,

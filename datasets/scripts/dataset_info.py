@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#============================== description ===================================
+# ============================= description ===================================
 
 # This script generates a file containing the given dataset information:
 #   number of nodes
@@ -10,7 +10,7 @@
 #
 # The generated file are located here:
 #    processed/<site>/<data>/info.json
-
+#
 # the format is json:
 # {
 #   'nb_nodes': <int>,
@@ -18,7 +18,7 @@
 #   'duration': <int> (in hours)
 # }
 
-#=============================== imports ======================================
+# ============================== imports ======================================
 
 import os
 import argparse
@@ -27,12 +27,12 @@ import json
 
 import DatasetHelper
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== main =========================================
+# ============================== main =========================================
 
 
 def main():

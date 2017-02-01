@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#============================== description ===================================
+# ============================= description ===================================
 
 # This script generates a new dataset with:
 #   X: the RSSI
@@ -8,11 +8,11 @@
 #
 # The generated file is located here:
 #    processed/<site>/<date>/pdr_rssi/many_to_many/pdr_rssi.json
-
+#
 # the format is json:
 #  { x: [], y: [], label:""}
 
-#=============================== imports ======================================
+# ============================== imports ======================================
 
 import os
 import argparse
@@ -21,12 +21,12 @@ import json
 
 import DatasetHelper
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== chart ========================================
+# ============================== chart ========================================
 
 chart_config = {
   "ChartType": "line",
@@ -35,7 +35,7 @@ chart_config = {
       "xAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'RSSI (dBm)'
+            "labelString": 'RSSI (dBm)'
         },
         "type": 'linear',
         "position": 'bottom',
@@ -44,7 +44,7 @@ chart_config = {
       "yAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'PDR (%)'
+            "labelString": 'PDR (%)'
         },
         "ticks": {
           "beginAtZero": True,
@@ -56,7 +56,7 @@ chart_config = {
   }
 }
 
-#=============================== main =========================================
+# ============================== main =========================================
 
 
 def main():

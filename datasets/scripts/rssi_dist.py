@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#============================== description ===================================
+# ============================= description ===================================
 
 # This script generates a new dataset with:
 #   X: the distance
@@ -8,7 +8,7 @@
 #
 # The generated file are located here:
 #    processed/<site>/<date>/rssi_dist/many_to_many/rssi_dist.json
-
+#
 # the format is json:
 # {
 #   'x': [],
@@ -16,7 +16,7 @@
 #   'label': ""
 # }
 
-#=============================== imports ======================================
+# ============================== imports ======================================
 
 import os
 import argparse
@@ -25,12 +25,12 @@ import json
 
 import DatasetHelper
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== chart ========================================
+# ============================== chart ========================================
 
 chart_config = {
   "ChartType": "line",
@@ -41,13 +41,13 @@ chart_config = {
         "position": 'bottom',
         "scaleLabel": {
             "display": True,
-            "labelString" : 'distance (m)'
+            "labelString": 'distance (m)'
         },
       }],
       "yAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'RSSI (dBm)'
+            "labelString": 'RSSI (dBm)'
         },
         "ticks": {
           "min": -100,
@@ -59,7 +59,7 @@ chart_config = {
   }
 }
 
-#=============================== main =========================================
+# ============================== main =========================================
 
 
 def main():
@@ -86,12 +86,10 @@ def main():
     list_rssi = []
     list_dist = []
 
-    # compute PDR and distance for each link
+    # compute RSSI and distance for each link
 
     group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
     for name, df_link in group_link:
-        dtsh_link = DatasetHelper.helper(df_link, args.testbed)
-        rx_count = len(df_link)
         dist = DatasetHelper.get_dist(node_list, name[0], name[1])
 
         for rssi in df_link["rssi"].tolist():
@@ -112,6 +110,8 @@ def main():
 
     with open(path + "rssi_dist.json", 'w') as output_file:
         json.dump(json_data, output_file)
+
+    # write chart configuration
 
     with open(path + "chart_config.json", 'w') as chart_config_file:
         json.dump(chart_config, chart_config_file)

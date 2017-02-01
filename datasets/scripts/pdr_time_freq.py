@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#============================== description ===================================
+# ============================= description ===================================
 
 # This script generates a new dataset with:
 #   X: the time
@@ -13,7 +13,7 @@
 # the format is json:
 #  TODO
 
-#=============================== imports ======================================
+# ============================== imports ======================================
 
 import os
 import argparse
@@ -23,17 +23,17 @@ import datetime
 
 import DatasetHelper
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== chart ========================================
+# ============================== chart ========================================
 
 chart_config = {
   "ChartType": "line",
   "ChartOptions": {
-    "elements":{
+    "elements": {
       "line": {"fill": False}
     },
     "scales": {
@@ -41,13 +41,13 @@ chart_config = {
         "type": "time",
         "scaleLabel": {
             "display": True,
-            "labelString" : 'Date'
+            "labelString": 'Date'
         },
       }],
       "yAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'PDR (%)'
+            "labelString": 'PDR (%)'
         },
         "ticks": {
           "min": 0,
@@ -58,7 +58,7 @@ chart_config = {
   }
 }
 
-#=============================== main =========================================
+# ============================== main =========================================
 
 
 def main():
@@ -147,7 +147,8 @@ def one_to_one(dtsh, date):
 
             # write result
 
-            path = "{0}/{1}/{2}/pdr_time_freq/one_to_one/{3}/{4}/".format(OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
+            path = "{0}/{1}/{2}/pdr_time_freq/one_to_one/{3}/{4}/".format(
+                OUT_PATH, dtsh["testbed"], date, srcmac, dstmac)
             if not os.path.exists(path):
                 os.makedirs(path)
             json_data = {

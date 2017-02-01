@@ -23,7 +23,7 @@ def helper(df, testbed=None):
     helper["node_count"] = len(df.groupby(df["mac"]))
     helper["channel_count"] = len(df.groupby(df["frequency"]))
     if "nbpackets" in df.keys():
-        helper["tx_count"]= df["nbpackets"].iloc[0]
+        helper["tx_count"] = df["nbpackets"].iloc[0]
     else:
         helper["tx_count"] = df["txnumpk"].iloc[0]
     helper["tx_ifdur"] = df["txifdur"].iloc[0]
@@ -55,5 +55,5 @@ def get_coords(node_list, mac):
 def get_dist(node_list, mac1, mac2):
     mac1_coords = get_coords(node_list, mac1)
     mac2_coords = get_coords(node_list, mac2)
-    dist = round(distance.euclidean(mac1_coords,mac2_coords),1)
+    dist = round(distance.euclidean(mac1_coords, mac2_coords), 1)
     return dist

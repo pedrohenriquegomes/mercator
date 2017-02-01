@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#============================== description ===================================
+# ============================= description ===================================
 
 # This script generates a new dataset with:
 #   X: the distance
@@ -8,7 +8,7 @@
 #
 # The generated file are located here:
 #    processed/<site>/pdr_dist/pdr_dist.json
-
+#
 # the format is json:
 # {
 #   'x': [],
@@ -16,7 +16,7 @@
 #   'label': ""
 # }
 
-#=============================== imports ======================================
+# ============================== imports ======================================
 
 import os
 import argparse
@@ -25,12 +25,12 @@ import json
 
 import DatasetHelper
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 OUT_PATH = "../processed"
 
-#=============================== chart ========================================
+# ============================== chart ========================================
 
 chart_config = {
   "ChartType": "line",
@@ -41,13 +41,13 @@ chart_config = {
         "position": 'bottom',
         "scaleLabel": {
             "display": True,
-            "labelString" : 'distance (m)'
+            "labelString": 'distance (m)'
         },
       }],
       "yAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString" : 'PDR (%)'
+            "labelString": 'PDR (%)'
         },
         "ticks": {
           "min": 0,
@@ -59,7 +59,7 @@ chart_config = {
   }
 }
 
-#=============================== main =========================================
+# ============================== main =========================================
 
 
 def main():
