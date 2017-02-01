@@ -175,13 +175,13 @@ def one_to_one(dtsh, date):
 def many_to_many(dtsh, date):
 
     # for each frequency
-    group_freq = dtsh.groupby(dtsh["frequency"])
+    group_freq = dtsh["data"].groupby(dtsh["data"]["frequency"])
     for freq, df_freq in group_freq:
         list_rssi = []
         list_time = []
 
         # for each transaction
-        group_trans = df_freq.groupby(dtsh["transctr"])
+        group_trans = df_freq.groupby(df_freq["transctr"])
         for transctr, df_trans in group_trans:
             t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
             for rssi in df_freq["rssi"].tolist():
