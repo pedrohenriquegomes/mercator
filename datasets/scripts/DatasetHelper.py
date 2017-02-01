@@ -4,7 +4,7 @@ import json
 import datetime
 
 
-def helper(df, testbed=None):
+def helper(df_in, testbed=None):
     helper = {
         "node_count": -1,
         "tx_count": None,
@@ -14,8 +14,7 @@ def helper(df, testbed=None):
     }
 
     # remove wrong values
-
-    df.drop_duplicates(inplace=True)
+    df = df_in.drop_duplicates()
     helper["data"] = df[(df.crc == 1) & (df.expected == 1)]
 
     # extract dataset properties
@@ -40,7 +39,8 @@ def helper(df, testbed=None):
 
 
 def get_nodes_info(testbed):
-    target_url = "https://raw.githubusercontent.com/openwsn-berkeley/mercator/data/metas/{0}.json".format(testbed)
+    #target_url = "https://raw.githubusercontent.com/openwsn-berkeley/mercator/data/metas/{0}.json".format(testbed)
+    target_url = "../../metas/{0}.json".format(testbed)
     node_list = json.loads(urllib.urlopen(target_url).read())
     return node_list
 
