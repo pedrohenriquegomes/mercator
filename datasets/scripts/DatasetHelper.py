@@ -39,7 +39,6 @@ def helper(df_in, testbed=None):
 
 
 def get_nodes_info(testbed):
-    #target_url = "https://raw.githubusercontent.com/openwsn-berkeley/mercator/data/metas/{0}.json".format(testbed)
     target_url = "../../metas/{0}.json".format(testbed)
     node_list = json.loads(urllib.urlopen(target_url).read())
     return node_list
