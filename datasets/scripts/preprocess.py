@@ -7,7 +7,7 @@
 import os
 import argparse
 
-#=============================== defines ======================================
+# ============================== defines ======================================
 
 RAW_PATH = "../raw"
 SCRIPTS = [
@@ -28,6 +28,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("site", help="The name of the site to process", type=str)
+    parser.add_argument("-d", "--date", help="The date of the site to process", type=str, default="")
     args = parser.parse_args()
 
     # get site list
@@ -41,9 +42,12 @@ def main():
     for script in SCRIPTS:
         for site in site_list:
             for date in os.listdir(RAW_PATH + "/" + site):
-                command = "python {0}.py {1} {2}".format(script, site, ".".join(date.split(".")[:-1]))
-                print command
-                os.system(command)
+                date_list = date.split('.')
+                if date_list[-1] == "csv":
+                    if (args.date != "" and args.date == ".".join(date_list[:-1])) or (args.date == ""):
+                        command = "python {0}.py {1} {2}".format(script, site, ".".join(date.split(".")[:-1]))
+                        print command
+                        os.system(command)
 
 
 if __name__ == '__main__':
