@@ -16,7 +16,8 @@ SCRIPTS = [
     "pdr_rssi",
     "pdr_time_freq",
     "pdr_dist",
-    "rssi_dist"
+    "rssi_dist",
+    "rssi_time_freq",
 ]
 
 # ============================== main =========================================
