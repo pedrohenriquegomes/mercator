@@ -88,7 +88,7 @@ def main():
 
     # compute PDR and distance for each link
 
-    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    group_link = dtsh["data"].groupby(["srcmac", "mac"])
     for name, df_link in group_link:
         dtsh_link = DatasetHelper.helper(df_link, args.testbed)
         rx_count = len(df_link)

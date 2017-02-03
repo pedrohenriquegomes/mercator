@@ -96,17 +96,17 @@ def main():
 def one_to_many(dtsh, date):
 
     # for each source (tx) node
-    group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
+    group_srcmac = dtsh["data"].groupby("srcmac")
     for srcmac, df_srcmac in group_srcmac:
 
         # for each channel
-        group_freq = df_srcmac.groupby(df_srcmac["frequency"])
+        group_freq = df_srcmac.groupby("frequency")
         for freq, df_freq in group_freq:
             list_rssi = []
             list_time = []
 
             # for each transaction
-            group_trans = df_freq.groupby(df_freq["transctr"])
+            group_trans = df_freq.groupby("transctr")
             for transctr, df_trans in group_trans:
                 t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
                 for rssi in df_freq["rssi"].tolist():
@@ -134,19 +134,19 @@ def one_to_many(dtsh, date):
 def one_to_one(dtsh, date):
 
     # for each pair of nodes
-    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    group_link = dtsh["data"].groupby(["srcmac", "mac"])
     for link, df_link in group_link:
         srcmac = link[0]
         dstmac = link[1]
 
         # for each frequency
-        group_freq = df_link.groupby(df_link["frequency"])
+        group_freq = df_link.groupby("frequency")
         for freq, df_freq in group_freq:
             list_rssi = []
             list_time = []
 
             # for each transaction
-            group_trans = df_freq.groupby(df_link["transctr"])
+            group_trans = df_freq.groupby("transctr")
             for transctr, df_trans in group_trans:
                 t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
                 for rssi in df_freq["rssi"].tolist():
@@ -175,13 +175,13 @@ def one_to_one(dtsh, date):
 def many_to_many(dtsh, date):
 
     # for each frequency
-    group_freq = dtsh["data"].groupby(dtsh["data"]["frequency"])
+    group_freq = dtsh["data"].groupby("frequency")
     for freq, df_freq in group_freq:
         list_rssi = []
         list_time = []
 
         # for each transaction
-        group_trans = df_freq.groupby(df_freq["transctr"])
+        group_trans = df_freq.groupby("transctr")
         for transctr, df_trans in group_trans:
             t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
             for rssi in df_freq["rssi"].tolist():

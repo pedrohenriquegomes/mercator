@@ -89,13 +89,13 @@ def main():
 
 def one_to_many(dtsh, date):
     # for each source (tx) node
-    group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
+    group_srcmac = dtsh["data"].groupby("srcmac")
     for srcmac, df_srcmac in group_srcmac:
-        group_freq = df_srcmac.groupby(df_srcmac["frequency"])
+        group_freq = df_srcmac.groupby("frequency")
         for freq, df_freq in group_freq:
             pdr_list = []
             time_list = []
-            group_trans = df_freq.groupby(df_freq["transctr"])
+            group_trans = df_freq.groupby("transctr")
             for transctr, df_trans in group_trans:
                 # pdr
                 rx_count = len(df_trans.index)
@@ -126,15 +126,15 @@ def one_to_many(dtsh, date):
 
 def one_to_one(dtsh, date):
 
-    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    group_link = dtsh["data"].groupby(["srcmac","mac"])
     for link, df_link in group_link:
         srcmac = link[0]
         dstmac = link[1]
-        group_freq = df_link.groupby(df_link["frequency"])
+        group_freq = df_link.groupby("frequency")
         for freq, df_freq in group_freq:
             pdr_list = []
             time_list = []
-            group_trans = df_freq.groupby(df_link["transctr"])
+            group_trans = df_freq.groupby("transctr")
             for transctr, df_trans in group_trans:
                 # pdr
                 rx_count = len(df_trans.index)

@@ -81,7 +81,7 @@ def main():
 
     # compute PDR and average RSSI by transaction
 
-    transaction = dtsh["data"].groupby([dtsh["data"]["transctr"], dtsh["data"]["srcmac"]])
+    transaction = dtsh["data"].groupby(["transctr", "srcmac"])
     for name, group in transaction:
         mean_rssi = group["rssi"].mean().tolist()
         rx_count = len(group)

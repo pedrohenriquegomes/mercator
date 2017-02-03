@@ -89,13 +89,13 @@ def main():
 def one_to_many(dtsh, date):
 
     # for each source (tx) node
-    group_srcmac = dtsh["data"].groupby(dtsh["data"]["srcmac"])
+    group_srcmac = dtsh["data"].groupby("srcmac")
     for srcmac, df_srcmac in group_srcmac:
 
         # for each frequency, compute pdr
         list_freq = []
         list_pdr = []
-        group_freq = df_srcmac.groupby(df_srcmac["frequency"])
+        group_freq = df_srcmac.groupby("frequency")
         for freq, df_freq in group_freq:
             rx_count = len(df_freq)
             pdr = rx_count * 100 / ((dtsh["node_count"]-1)*dtsh["tx_count"])
@@ -123,7 +123,7 @@ def one_to_many(dtsh, date):
 def one_to_one(dtsh, date):
 
     # for each pair of node
-    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    group_link = dtsh["data"].groupby(["srcmac", "mac"])
     for link, df_link in group_link:
         srcmac = link[0]
         dstmac = link[1]
@@ -131,7 +131,7 @@ def one_to_one(dtsh, date):
         # for each frequency compute pdr
         list_freq = []
         list_pdr = []
-        group_freq = df_link.groupby(df_link["frequency"])
+        group_freq = df_link.groupby("frequency")
         for freq, df_freq in group_freq:
             rx_count = len(df_freq)
             pdr = (rx_count * 100 / dtsh["tx_count"])

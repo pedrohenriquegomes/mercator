@@ -88,7 +88,7 @@ def main():
 
     # compute RSSI and distance for each link
 
-    group_link = dtsh["data"].groupby([dtsh["data"]["srcmac"], dtsh["data"]["mac"]])
+    group_link = dtsh["data"].groupby(["srcmac", "mac"])
     for name, df_link in group_link:
         dist = DatasetHelper.get_dist(node_list, name[0], name[1])
 
