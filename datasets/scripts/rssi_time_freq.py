@@ -109,7 +109,7 @@ def one_to_many(dtsh, date):
             group_trans = df_freq.groupby("transctr")
             for transctr, df_trans in group_trans:
                 t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
-                for rssi in df_freq["rssi"].tolist():
+                for rssi in df_trans["rssi"].tolist():
                     list_time.append(t)
                     list_rssi.append(rssi)
 
@@ -149,7 +149,7 @@ def one_to_one(dtsh, date):
             group_trans = df_freq.groupby("transctr")
             for transctr, df_trans in group_trans:
                 t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
-                for rssi in df_freq["rssi"].tolist():
+                for rssi in df_trans["rssi"].tolist():
                     list_time.append(t)
                     list_rssi.append(rssi)
 
@@ -184,7 +184,7 @@ def many_to_many(dtsh, date):
         group_trans = df_freq.groupby("transctr")
         for transctr, df_trans in group_trans:
             t = datetime.datetime.strptime(df_trans["timestamp"].iloc[0], "%Y-%m-%d_%H.%M.%S")
-            for rssi in df_freq["rssi"].tolist():
+            for rssi in df_trans["rssi"].tolist():
                 list_time.append(t)
                 list_rssi.append(rssi)
 
