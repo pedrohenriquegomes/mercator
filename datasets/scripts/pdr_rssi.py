@@ -85,7 +85,8 @@ def main():
     for name, group in transaction:
         mean_rssi = int(group["rssi"].mean().round())
         rx_count = len(group)
-        pdr = (rx_count * 100) / ((dtsh["node_count"] - 1) * dtsh["tx_count"])
+        tx_count = (dtsh["node_count"] - 1) * dtsh["tx_count"] * dtsh["channel_count"]
+        pdr = (rx_count * 100) / tx_count
         list_pdr.append(pdr)
         list_rssi.append(mean_rssi)
 
