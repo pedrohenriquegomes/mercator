@@ -35,7 +35,7 @@ chart_config = {
       "xAxes": [{
         "scaleLabel": {
             "display": True,
-            "labelString": 'RSSI (dBm)'
+            "labelString": 'mean RSSI (dBm)'
         },
         "type": 'linear',
         "position": 'bottom',
@@ -83,11 +83,15 @@ def main():
 
     transaction = dtsh["data"].groupby(["transctr", "srcmac"])
     for name, group in transaction:
-        mean_rssi = group["rssi"].mean().tolist()
+        mean_rssi = int(group["rssi"].mean().round())
         rx_count = len(group)
         pdr = (rx_count * 100) / ((dtsh["node_count"] - 1) * dtsh["tx_count"])
         list_pdr.append(pdr)
         list_rssi.append(mean_rssi)
+
+    # compute average values
+
+    df_avg = pd.DataFrame({"y": list_pdr, "x": list_rssi}).groupby("x", as_index=False).mean().round()
 
     # write result
 
@@ -97,6 +101,7 @@ def main():
     json_data = {
         "x": map(str, list_rssi),
         "y": list_pdr,
+        "avg": [{'x': x, 'y': y} for (x, y) in df_avg.to_dict("split")["data"]],
         "label": "Waterfall plot"
     }
 
