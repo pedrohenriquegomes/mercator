@@ -1,1 +1,0 @@
-{"ChartType": "line", "ChartOptions": {"showLines": false, "scales": {"xAxes": [{"position": "bottom", "scaleLabel": {"display": true, "labelString": "RSSI (dBm)"}, "ticks": {"max": -20, "min": -100}, "type": "linear"}], "yAxes": [{"scaleLabel": {"display": true, "labelString": "PDR (%)"}, "ticks": {"ticks": {"max": 100, "min": 0}, "beginAtZero": true}}]}}}
