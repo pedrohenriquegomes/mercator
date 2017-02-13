@@ -96,6 +96,10 @@ def main():
             list_dist.append(dist)
             list_rssi.append(rssi)
 
+    # compute average values
+
+    df_avg = pd.DataFrame({"y": list_rssi, "x": list_dist}).groupby("x", as_index=False).mean().round(1)
+
     # write result
 
     path = "{0}/{1}/{2}/rssi_dist/many_to_many/".format(OUT_PATH, args.testbed, args.date)
@@ -105,6 +109,7 @@ def main():
     json_data = {
         "x": list_dist,
         "y": list_rssi,
+        "avg": [{'x': x, 'y': y} for (x, y) in df_avg.to_dict("split")["data"]],
         "label": "RSSI over distance"
     }
 
