@@ -23,12 +23,14 @@ column name  | description
 `crc`        | `1` if the packet was received with a good CRC, `0` otherwise.
 `expected`   | `1` if the packet is expected, `0` otherwise.
 `srcmac`     | 8-byte MAC address of the mote sending the received packets, as read from the packet. Set to all `0`'s if `crc` or `expected` is `0`.
-`transctr`   | 1-byte transaction counter, read from the packet, in hexadecimal. Example: `0x01`. Set to all `0`'s if `crc` or `expected` is `0`.
+`transctr`   | 2-byte transaction counter, read from the packet, in hexadecimal. Example: `0x0123`.
 `pkctr`      | 2-byte counter read from the packet, in hexadecimal. Example: `0x0123`. Set to all `0`'s if `crc` or `expected` is `0`.
 `txnumpk`    | Number of packets the transmitter is configured to transmit.
 `txifdur`    | Number of millisecond the transmitter is configured to wait between the beginning of each packet.
 `txlength`   | Length, in bytes, of each transmitted packet.
 `txfillbyte` | Byte the transmitter uses to fill the packet, in hexadecimal. Example: `0x0a`.
+
+For more details, see [What is an experiment](https://github.com/openwsn-berkeley/mercator/wiki/What-is-an-experiment-%3F).
 
 ## Pre-processed dataset format
 
