@@ -51,8 +51,8 @@ chart_config = {
             "labelString": 'RSSI (dBm)'
         },
         "ticks": {
-          "min": 0,
-          "max": 100
+          "min": -100,
+          "max": -20
         },
       }]
     },
