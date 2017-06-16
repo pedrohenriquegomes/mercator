@@ -46,7 +46,14 @@ def main():
 
     # load the dataset
 
-    raw_file_path = "{0}/{1}/{2}.csv".format(RAW_PATH, args.testbed, args.date)
+    raw_file_path = "{0}/{1}/{2}".format(RAW_PATH, args.testbed, args.date)
+    if os.path.isfile(raw_file_path + ".csv"):
+        raw_file_path += ".csv"
+    elif os.path.isfile(raw_file_path + ".csv.gz"):
+        raw_file_path += ".csv.gz"
+    else:
+        print "Files supported: .csv and .csv.gz"
+        quit()
     df = pd.read_csv(raw_file_path)
     dtsh = DatasetHelper.helper(df, args.testbed)
     file_size = round(os.path.getsize(raw_file_path) / (1024*1024), 2)
