@@ -15,6 +15,9 @@ import threading
 import json
 import datetime
 import logging.config
+import gzip
+import socket
+import os
 
 # Mercator
 import MoteHandler
@@ -49,7 +52,6 @@ class MercatorRunExperiment(object):
     TXIFDUR        = 100                         # inter-frame duration, in ms
     txpksize       = 100                         # number of bytes (PHY payload) in a frame
     TXFILLBYTE     = 0x0a                        # padding byte
-    ITDUR          = 60                          # inter-transcation duration, in s
 
     def __init__(self, args, serialports, site="local"):
 
@@ -73,22 +75,28 @@ class MercatorRunExperiment(object):
                 logconsole.info("DELETED %s", s)
                 del self.motes[s]
 
-        self.file            = open('{0}{1}-{2}_raw.csv'.format(DATASET_PATH,
+        self.file            = gzip.open('{0}{1}-{2}_raw.csv.gz'.format(DATASET_PATH,
                                     self.site,
-                                    datetime.datetime.now().strftime("%Y.%m.%d-%H.%M.%S")),
-                                    'w')
+                                    datetime.datetime.now().strftime("%Y.%m.%d-%H.%M.%S,%f")),
+                                    'wb')
         self.file.write('timestamp,mac,frequency,length,rssi,crc,expected,srcmac,transctr,' +
                         'pkctr,nbpackets,txpower,txifdur,txpksize,txfillbyte\n')
 
-        # start transaction
-        for self.transctr in range(0,self.nbtrans):
-            logconsole.info("Current transaction: %s", self.transctr)
-            self._do_transaction()
-            time.sleep(ITDUR)
-
-        # print all OK
-        raw_input('\nExperiment ended normally. Press Enter to close.')
-        self.file.close()
+        try:
+            # start transactions
+            for self.transctr in range(0,self.nbtrans):
+                logconsole.info("Current transaction: %s", self.transctr)
+                self._do_transaction()
+        except (KeyboardInterrupt, socket.error):
+            # print error
+            print('\nExperiment ended before all transactions were done.')
+        else:
+            # print all OK
+            print('\nExperiment ended normally.')		
+        finally:
+            self.file.flush()
+            os.fsync(self.file.fileno())
+            self.file.close()
     # ======================= public ==========================================
 
     # ======================= cli handlers ====================================
