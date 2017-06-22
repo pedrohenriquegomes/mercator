@@ -38,7 +38,7 @@ logfile     = logging.getLogger()  #root logger
 
 FIRMWARE_PATH   = "../../firmware/"
 DATASET_PATH    = "./"
-METAS_PATH      = "."
+METAS_PATH      = "./"
 
 # =========================== body ============================================
 
@@ -77,7 +77,7 @@ class MercatorRunExperiment(object):
 
         self.file            = gzip.open('{0}{1}-{2}_raw.csv.gz'.format(DATASET_PATH,
                                     self.site,
-                                    datetime.datetime.now().strftime("%Y.%m.%d-%H.%M.%S,%f")),
+                                    datetime.datetime.now().strftime("%Y.%m.%d-%H.%M.%S")),
                                     'wb')
         self.file.write('timestamp,mac,frequency,length,rssi,crc,expected,srcmac,transctr,' +
                         'pkctr,nbpackets,txpower,txifdur,txpksize,txfillbyte\n')
@@ -200,7 +200,7 @@ class MercatorRunExperiment(object):
                     self.waitTxDone.set()
             elif notif['type'] == d.TYPE_IND_RX:
                 # print '.', # TODO: log to file
-                timestamp  = datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S")
+                timestamp  = datetime.datetime.now().strftime("%Y-%m-%d_%H.%M.%S,%f")
                 mac        = d.format_mac(self.motes[serialport].get_mac())
                 frequency  = self.freq
                 length     = notif['length']
